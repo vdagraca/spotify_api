@@ -1,10 +1,11 @@
 const { Router } = require('express')
 const Playlist = require('./model')
 const auth = require('../auth/middleware')
+const Song = require('../songs/model')
 
 const router = new Router()
 
-router.post('/playlists', auth, (req, res, next) => {
+router.post('/playlists', (req, res, next) => {
     Playlist
         .create(req.body)
         .then(playlists => {
@@ -32,9 +33,9 @@ router.get('/playlists', function (req, res, next) {
         })
 })
 
-router.get('/playlists/:id', auth, (req, res, next) => {
+router.get('/playlists/:id', (req, res, next) => {
     Playlist
-        .findByPk(req.params.id)
+        .findByPk(req.params.id, { include: [Song] })
         .then(playlist => {
             if (!playlist) {
                 return res.status(404).send({
