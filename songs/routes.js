@@ -48,4 +48,19 @@ router.delete('/playlists/:id/songs/:id', auth, (req, res, next) => {
         .catch(error => next(error))
 })
 
+router.get('/artists', auth, (req, res, next) => {
+    Song
+        .findAll()
+
+        .then(songs => {
+            res.json(songs.map(song => song.dataValues.artist))
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'Something went wrong',
+                error: err
+            })
+        })
+})
+
 module.exports = router
