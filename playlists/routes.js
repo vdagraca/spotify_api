@@ -4,7 +4,7 @@ const auth = require('../auth/middleware')
 
 const router = new Router()
 
-router.post('/playlists', auth, (req, res, next) => {
+router.post('/playlists', (req, res, next) => {
     Playlist
         .create(req.body)
         .then(playlists => {
