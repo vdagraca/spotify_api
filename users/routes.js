@@ -5,15 +5,20 @@ const bcrypt = require('bcrypt')
 const router = new Router()
 
 router.post('/users', (req, res, next) => {
+
+    if (req.body.password !== req.body.password_confirmation) {
+
+        return res.status(422).send({
+            message: 'Confirmed password incorrect'
+        })
+    }
+
     User
         .create(
-            // password => {if (password === password_confirmation) 
-            // return 
             {
                 email: req.body.email,
-                password: bcrypt.hashSync(req.body.password, 10),
+                password: bcrypt.hashSync(req.body.password, 10)
             }
-            // }
         )
         .then(user => {
             if (!user) {
@@ -24,6 +29,9 @@ router.post('/users', (req, res, next) => {
             return res.status(201).send(user)
         })
         .catch(error => next(error))
+
+
+
 })
 
 module.exports = router

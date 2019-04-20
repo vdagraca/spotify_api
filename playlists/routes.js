@@ -5,7 +5,7 @@ const Song = require('../songs/model')
 
 const router = new Router()
 
-router.post('/playlists', (req, res, next) => {
+router.post('/playlists', auth, (req, res, next) => {
     Playlist
         .create(req.body)
         .then(playlists => {
@@ -19,7 +19,7 @@ router.post('/playlists', (req, res, next) => {
         .catch(error => next(error))
 })
 
-router.get('/playlists', function (req, res, next) {
+router.get('/playlists', auth, (req, res, next) => {
     Playlist
         .findAll()
         .then(playlists => {
@@ -33,7 +33,7 @@ router.get('/playlists', function (req, res, next) {
         })
 })
 
-router.get('/playlists/:id', (req, res, next) => {
+router.get('/playlists/:id', auth, (req, res, next) => {
     Playlist
         .findByPk(req.params.id, { include: [Song] })
         .then(playlist => {
@@ -57,9 +57,7 @@ router.delete('/playlists/:id', auth, (req, res, next) => {
                 })
             }
             return playlist.destroy()
-                .then(() => res.send({
-                    message: `Playlist was deleted`
-                }))
+                .then(() => res.status(204).send())
         })
         .catch(error => next(error))
 })
