@@ -4,7 +4,7 @@ const auth = require('../auth/middleware')
 
 const router = new Router()
 
-router.post('/playlists', (req, res, next) => {
+router.post('/playlists', auth, (req, res, next) => {
     Playlist
         .create(req.body)
         .then(playlists => {
@@ -18,7 +18,7 @@ router.post('/playlists', (req, res, next) => {
         .catch(error => next(error))
 })
 
-router.get('/playlists', auth, function (req, res, next) {
+router.get('/playlists', function (req, res, next) {
     Playlist
         .findAll()
         .then(playlists => {
